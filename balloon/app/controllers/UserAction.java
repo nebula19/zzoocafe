@@ -3,12 +3,13 @@ package controllers;
 import java.util.ArrayList;
 import java.util.List;
 
-import models.User;
+import models.ebeans.User;
 import play.data.Form;
+import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
-import views.html.user;
-import views.html.user_list;
+import util.JsonUtil;
+import views.html.*;
 
 public class UserAction extends Controller {
 
@@ -17,12 +18,14 @@ public class UserAction extends Controller {
 	
     public static Result get(Long id) {
 //        return ok(index.render("Your new application is ready."));
-    	return ok(user.render(User.get(id)));
+//    	return ok(JsonUtil.getJsonResult(0, "ok", User.get(id)));
+    	//return ok(user.render(User.get(id)));
+    	return ok(user.render(JsonUtil.getJsonResult(0, "ok", User.get(id))));
     }
 
     public static Result list() {
     	
-        return ok(user_list.render(User.list()));
+        return ok(JsonUtil.getJsonResult(0, "ok", User.list()));
     }
     
     public static List<UserAction> all() {
