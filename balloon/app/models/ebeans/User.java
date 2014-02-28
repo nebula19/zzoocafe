@@ -49,7 +49,8 @@ public class User extends Model  {
 	}
 	
 	public static List<User> list() {
-		return find.where().between("id", 2, 4).findPagingList(1).getPage(2).getList();
+//		return find.where().findPagingList(10).getPage(0).getList();
+		return find.select("username, create_time").findList();
 	}
 	
 	public static Finder<Long, User> find = new Finder<Long, User>(Long.class, User.class);

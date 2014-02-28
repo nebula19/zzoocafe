@@ -17,14 +17,15 @@ public class UserAction extends Controller {
 	static Form<UserAction> userForm = Form.form(UserAction.class);
 	
     public static Result get(Long id) {
-//        return ok(index.render("Your new application is ready."));
+//      return ok(index.render("Your new application is ready."));
 //    	return ok(JsonUtil.getJsonResult(0, "ok", User.get(id)));
-    	//return ok(user.render(User.get(id)));
-    	return ok(user.render(JsonUtil.getJsonResult(0, "ok", User.get(id))));
+//    	return ok(user.render(User.get(id)));
+//    	return ok(user.render(JsonUtil.getJsonResult(0, "ok", User.get(id))));
+    	return ok(JsonUtil.getJsonResult(0, "ok", User.get(id)));
     }
 
     public static Result list() {
-    	
+//    	return ok(user_list.render(JsonUtil.getJsonResult(0, "ok", User.list())));
         return ok(JsonUtil.getJsonResult(0, "ok", User.list()));
     }
     
