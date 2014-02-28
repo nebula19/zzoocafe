@@ -1,8 +1,8 @@
 package util;
 
-import models.JsonResult;
-import play.db.ebean.Model;
+import models.ZzooResult;
 import play.libs.Json;
+import play.mvc.Content;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -17,7 +17,12 @@ public class JsonUtil {
 	 * @return
 	 */
 	public static JsonNode getJsonResult(int result, String message, Object model) {
-		JsonResult jsonResult = new JsonResult(result, message, model);
+		ZzooResult jsonResult = new ZzooResult(result, message, model);
+		return Json.toJson(jsonResult);
+	}
+
+	public static JsonNode getJsonResult(int resultCode) {
+		ZzooResult jsonResult = new ZzooResult(resultCode);
 		return Json.toJson(jsonResult);
 	}
 	

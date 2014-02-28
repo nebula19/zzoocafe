@@ -1,19 +1,23 @@
 package controllers;
 
+import static play.data.Form.form;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import models.ZzooResult;
 import models.ebeans.User;
 import play.data.Form;
-import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import util.JsonUtil;
-import views.html.*;
+import views.html.user.*;
+
+
 
 public class UserAction extends Controller {
 
-	
+	// Form<Computer> computerForm = form(Computer.class).bindFromRequest();
 	static Form<UserAction> userForm = Form.form(UserAction.class);
 	
     public static Result get(Long id) {
@@ -34,6 +38,10 @@ public class UserAction extends Controller {
     }
     
     public static Result create(User task) {
+    	Form<User> userForm = form(User.class).bindFromRequest();
+    	if (userForm.hasErrors()) {
+    		badRequest(JsonUtil.getJsonResult(ZzooResult.BAD_REQUEST));
+    	}
     	return ok();
     }
     
