@@ -1,5 +1,7 @@
 package models;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 
 public class ZzooResult {
 	
@@ -13,6 +15,7 @@ public class ZzooResult {
 	public int result;
 	public String message;
 	
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	public Object data;
 
 	

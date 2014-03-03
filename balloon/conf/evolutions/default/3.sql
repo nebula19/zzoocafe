@@ -1,1 +1,0 @@
-alter table user score                     int(10) default 0;

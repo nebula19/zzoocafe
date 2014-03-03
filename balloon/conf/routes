@@ -8,7 +8,7 @@ GET     /                           controllers.Application.index()
 
 GET     /user/:id/get                     controllers.UserAction.get(id : Long)
 GET     /user/list                        controllers.UserAction.list()
-# GET     /user/create                      controllers.UserAction.create(user)
+GET     /user/create                      controllers.UserAction.create()
 GET     /user/:id/delete                  controllers.UserAction.delete(id : Long)
 
 

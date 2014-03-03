@@ -3,7 +3,7 @@
 
 # --- !Ups
 
-create table user (
+create table t_user (
   id                        bigint auto_increment not null,
   username                  varchar(100) not null default '',
   user_id                   bigint(20) not null default 0,
@@ -12,10 +12,12 @@ create table user (
   oil                       int(5) default 0,
   diamond                   int(5) default 0,
   score                     int(11) default 0,
-  constraint pk_user primary key (id))
+  constraint uq_t_user_username unique (username),
+  constraint uq_t_user_user_id unique (user_id),
+  constraint pk_t_user primary key (id))
 ;
 
-create table user_buffs (
+create table t_user_buff (
   user_uid                  bigint auto_increment not null,
   hero_power                float not null default 0.0,
   hero_shoot_speed          float default 0.0,
@@ -45,7 +47,7 @@ create table user_buffs (
   item_shoot_velocity       float default 0.0,
   item_drop_acceleration    float default 0.0,
   game_play_time            float default 0.0,
-  constraint pk_user_buffs primary key (user_uid))
+  constraint pk_t_user_buff primary key (user_uid))
 ;
 
 
@@ -55,9 +57,9 @@ create table user_buffs (
 
 SET FOREIGN_KEY_CHECKS=0;
 
-drop table user;
+drop table t_user;
 
-drop table user_buffs;
+drop table t_user_buff;
 
 SET FOREIGN_KEY_CHECKS=1;
 
