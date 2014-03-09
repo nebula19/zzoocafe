@@ -6,10 +6,36 @@
 GET     /                           controllers.Application.index()
 
 
-GET     /user/:id/get                     controllers.UserAction.get(id : Long)
-GET     /user/list                        controllers.UserAction.list()
-GET     /user/create                      controllers.UserAction.create()
-GET     /user/:id/delete                  controllers.UserAction.delete(id : Long)
+# user account info
+GET     /api2/user/:id/get                     controllers.UserAction.get(id : Long)
+GET     /api2/user/list                        controllers.UserAction.list()
+GET     /api2/user/create                      controllers.UserAction.create()
+POST    /api2/user/create                      controllers.UserAction.create()
+GET     /api2/user/:id/delete                  controllers.UserAction.delete(id : Long)
+
+
+#user game play 
+GET		/api2/user/:id/play_data                controllers.GameAction.getPlayData(id : Long)
+PUT		/api2/user/:id/play_data                controllers.GameAction.updatePlayData(id : Long)
+
+PUT		/api2/user/:id/weapons/:weaponId/upgrade	controllers.GameAction.upgradeWeapon(id : Long, weaponId : Long)
+PUT		/api2/user/:id/weapons/:weaponId/equip		controllers.GameAction.equipWeapon(id : Long, weaponId : Long)
+
+POST	/api2/user/:id/weapons/purchase		controllers.GameAction.purchaseWeapon(id : Long)
+POST	/api2/user/:id/weapons/gamble		controllers.GameAction.gambleWeapon(id : Long)
+
+
+GET		/api2/user/:id/friends				controllers.SocialAction.friendList(id : Long)
+
+
+
+##### common game info
+#weapon definitions  
+GET    /api2/weapons							controllers.GameAction.getWeaponList()
+
+
+#rankings
+
 
 
 

@@ -1,10 +1,14 @@
 package models.ebeans;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import play.db.ebean.Model;
@@ -29,7 +33,7 @@ public class User extends Model  {
 	// Profile
 	@Column(columnDefinition = "varchar(100) not null default ''", unique=true)
 	public String username;
-	@Column(columnDefinition = "bigint(20) not null default 0", unique=true, nullable=true)
+	@Column(columnDefinition = "bigint(20) default 0", unique=true, nullable=true)
 	public Long userId;
 	
 	@Column(columnDefinition = "varchar(250) default ''")
@@ -47,16 +51,56 @@ public class User extends Model  {
 	@Column(columnDefinition = "int(11) default 0", insertable = false)
 	public Integer score;
 	
+	@Column(columnDefinition = "timestamp default CURRENT_TIMESTAMP", insertable = false, updatable = false)
+	public Date createDate;
 	
-	public static User get(Long id) {
+//	@Column(columnDefinition = "timestamp DEFAULT now() ON UPDATE now()", insertable = false, updatable = false)
+//	public Date modifyDate;
+	
+	
+	@OneToMany(cascade = CascadeType.ALL)
+	public List<UserWeapon> weapons = new ArrayList<UserWeapon>();
+	
+	
+
+	public static User getAccountInfo(Long id) {
 		return find.byId(id);
 	}
+	
+	
+
+	public static User getPlayData(Long id) {
+		return find.select("score, gold, oil, diamond").where("id = " + id).findUnique();
+	}
+
+	
+	
 	
 	public static List<User> list() {
 //		return find.where().findPagingList(10).getPage(0).getList();
 		return find.select("username, create_time").findList();
 	}
+
 	
+	public static List<User> listOrderByScore() {
+//		return find.where().findPagingList(10).getPage(0).getList();
+		return find.select("id, user_id, username, score").where().orderBy("score desc").findPagingList(10).getPage(0).getList();
+	}
+	
+	
+    public static void purchaseWeaon(Long userId, Long weaponId) {
+        User p = User.find.setId(userId).fetch("weapons", "weaponId").findUnique();
+        UserWeapon userWeapon = new UserWeapon(userId, weaponId);
+        userWeapon.save();
+        p.weapons.add( userWeapon );
+        
+        p.saveManyToManyAssociations("weapons");
+    }
+	
+    
+    
+    
+    
 	public static Finder<Long, User> find = new Finder<Long, User>(Long.class, User.class);
 
 

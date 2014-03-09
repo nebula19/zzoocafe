@@ -20,6 +20,12 @@ public class JsonUtil {
 		return Json.toJson(jsonResult);
 	}
 
+	public static JsonNode getJsonResult(int result, Object model) {
+		ZzooResult jsonResult = new ZzooResult(result, model);
+		return Json.toJson(jsonResult);
+	}
+
+	
 	public static JsonNode getJsonResult(int resultCode) {
 		ZzooResult jsonResult = new ZzooResult(resultCode);
 		return Json.toJson(jsonResult);
