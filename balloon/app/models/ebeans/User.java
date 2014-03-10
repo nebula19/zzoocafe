@@ -24,7 +24,7 @@ public class User extends Model  {
 	private static final long serialVersionUID = -4628099529895979489L;
 
 
-	// UID
+	// UniqueID
 	@Id
 	@Column(insertable = false)
 	public Long id;
@@ -34,7 +34,7 @@ public class User extends Model  {
 	@Column(columnDefinition = "varchar(100) not null default ''", unique=true)
 	public String username;
 	@Column(columnDefinition = "bigint(20) default 0", unique=true, nullable=true)
-	public Long userId;
+	public Long socialAccountId;
 	
 	@Column(columnDefinition = "varchar(250) default ''")
 	public String thumbnailUrl;
@@ -58,8 +58,8 @@ public class User extends Model  {
 //	public Date modifyDate;
 	
 	
-	@OneToMany(cascade = CascadeType.ALL)
-	public List<UserWeapon> weapons = new ArrayList<UserWeapon>();
+	@OneToMany(mappedBy="user", cascade = CascadeType.ALL)
+	public List<UserWeapon> userWeapons = new ArrayList<UserWeapon>();
 	
 	
 
@@ -89,12 +89,15 @@ public class User extends Model  {
 	
 	
     public static void purchaseWeaon(Long userId, Long weaponId) {
-        User p = User.find.setId(userId).fetch("weapons", "weaponId").findUnique();
-        UserWeapon userWeapon = new UserWeapon(userId, weaponId);
-        userWeapon.save();
-        p.weapons.add( userWeapon );
+        User user = User.find.setId(userId).fetch("userWeapons", "weaponId").findUnique();
         
-        p.saveManyToManyAssociations("weapons");
+        Weapon weapon = Weapon.find.ref(weaponId);
+        UserWeapon userWeapon = new UserWeapon(user, weaponId);
+        userWeapon.save();
+        
+        user.userWeapons.add( userWeapon );
+        
+        user.saveManyToManyAssociations("userWeapons");
     }
 	
     

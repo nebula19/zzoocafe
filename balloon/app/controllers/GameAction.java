@@ -69,7 +69,7 @@ public class GameAction extends Controller {
 		User.purchaseWeaon(id, r);
 		
 		Map<String, List<UserWeapon>> weaponList = new HashMap<String, List<UserWeapon>>();
-		weaponList.put("user_weapons", User.find.byId(id).weapons);
+		weaponList.put("user_weapons", User.find.byId(id).userWeapons);
 
 		return ok(JsonUtil.getJsonResult(0, weaponList));
 	}

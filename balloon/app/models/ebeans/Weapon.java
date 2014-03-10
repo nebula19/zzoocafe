@@ -22,20 +22,20 @@ public class Weapon extends Model  {
 
 	// UID
 	@Id
-	@Column(insertable = false)
 	public Long id;
-	
-	
 	
 	public String name;
 	public String type;
-	public String grade;		// 희귀등급.
+	public String rarity;		// 희귀등급. rarity
 	public String image;
 	public String sound;
 	public Integer price;
 	
-	
-	
+	public Float damage;
+	public Float shootingRate;
+	public Float criticalRate;
+	public Float velocity;
+
 	
 	@Column(columnDefinition = "timestamp default CURRENT_TIMESTAMP", insertable = false)
 	public Date createDate;

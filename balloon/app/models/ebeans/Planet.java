@@ -8,15 +8,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import play.db.ebean.Model;
-
+/*
 @Entity
 @Table(name="t_planet") 
 public class Planet extends Model  {
 	
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -4628099529895979489L;
 
 
@@ -44,5 +41,6 @@ public class Planet extends Model  {
 	
 	public static Finder<Long, Planet> find = new Finder<Long, Planet>(Long.class, Planet.class);
 
-
 }
+
+*/

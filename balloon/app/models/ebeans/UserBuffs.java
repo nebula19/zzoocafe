@@ -9,14 +9,13 @@ import javax.persistence.Table;
 
 import play.db.ebean.Model;
 
+
+/*
 @Entity
 @Table(name="t_user_buff") 
 public class UserBuffs extends Model{
 	
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1231192383169886402L;
 
 
@@ -101,5 +100,8 @@ public class UserBuffs extends Model{
 		return null;
 	}
 	
-	public static Finder<Long, UserBuffs> find = new Finder<Long, UserBuffs>(Long.class, UserBuffs.class);
+//	public static Finder<Long, UserBuffs> find = new Finder<Long, UserBuffs>(Long.class, UserBuffs.class);
 }
+
+
+*/
