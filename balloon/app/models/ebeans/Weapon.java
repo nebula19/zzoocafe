@@ -31,7 +31,7 @@ public class Weapon extends Model  {
 	public String sound;
 	public Integer price;
 	
-	public Float damage;
+	public Float power;
 	public Float shootingRate;
 	public Float criticalRate;
 	public Float velocity;

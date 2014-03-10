@@ -34,7 +34,7 @@ public class UserWeapon extends Model {
 	@JoinColumn(name = "weapon_id")
 	public Long weaponId;
 	
-	public Float damage = 0.0F;
+	public Float power = 0.0F;
 	public Float shootingRate = 0.0F;
 	public Float criticalRate = 0.0F;
 	public Float velocity = 0.0F;
@@ -45,4 +45,12 @@ public class UserWeapon extends Model {
 	public static Finder<Long, UserWeapon> find = new Finder<Long, UserWeapon>(Long.class, UserWeapon.class);
 
 
+	
+	public void applyUpgrade(UserWeapon upgradeData) {
+		System.out.println(upgradeData);
+		this.power += upgradeData.power;
+		System.out.println(upgradeData.power);
+		this.shootingRate += upgradeData.shootingRate;
+		System.out.println(upgradeData.shootingRate);
+	}
 }

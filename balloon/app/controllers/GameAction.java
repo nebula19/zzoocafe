@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.avaje.ebean.Expression;
+
 import models.ZzooResult;
 import models.ebeans.User;
 import models.ebeans.UserWeapon;
@@ -43,14 +45,31 @@ public class GameAction extends Controller {
 	}
 
 
-	// PUT		/api2/user/:id/weapons/:weaponId/upgrade
-	public static Result upgradeWeapon(Long id, Long weaponId) {
-		// TODO implement.
-		return ok(JsonUtil.getJsonResult(0));
+	// PUT		/api2/user/:id/weapons/:weaponUid/upgrade
+	public static Result upgradeWeapon(Long userId, Long weaponUid) {
+		UserWeapon userWeapon = UserWeapon.find.byId(weaponUid);
+		
+		Form<UserWeapon> userWeaponForm = form(UserWeapon.class).bindFromRequest("power", "shootingRate");
+		
+		if (userWeapon == null) {
+			return ok(JsonUtil.getJsonResult(BAD_REQUEST, "소지하지 않은 무기입니다"));
+		}
+
+		if (userWeaponForm.get() == null) {
+			return ok(JsonUtil.getJsonResult(BAD_REQUEST, "강화수치를 파악할 수 없습니다."));
+		}
+
+		
+		userWeapon.applyUpgrade(userWeaponForm.get());
+		userWeapon.save();
+		
+		User user = User.find.byId(userId);
+		
+		return ok(JsonUtil.getJsonResult(0, user));
 	}
 
-	// PUT		/api2/user/:id/weapons/:weaponId/equip
-	public static Result equipWeapon(Long id, Long weaponId) {
+	// PUT		/api2/user/:id/weapons/:weaponUid/equip
+	public static Result equipWeapon(Long id, Long weaponUid) {
 		// TODO implement needed
 		return ok(JsonUtil.getJsonResult(0));
 	}
