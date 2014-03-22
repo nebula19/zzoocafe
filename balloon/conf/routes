@@ -18,8 +18,8 @@ GET     /api2/user/:id/delete                  controllers.UserAction.delete(id 
 GET		/api2/user/:id/play_data                controllers.GameAction.getPlayData(id : Long)
 PUT		/api2/user/:id/play_data                controllers.GameAction.updatePlayData(id : Long)
 
-PUT		/api2/user/:id/weapons/:weaponUid/upgrade	controllers.GameAction.upgradeWeapon(id : Long, weaponUid : Long)
-PUT		/api2/user/:id/weapons/:weaponUid/equip		controllers.GameAction.equipWeapon(id : Long, weaponUid : Long)
+PUT		/api2/user/:id/weapons/:weaponUid/upgrade			controllers.GameAction.upgradeWeapon(id : Long, weaponUid : Long)
+PUT		/api2/user/:id/weapons/:weaponUid/equip/:position	controllers.GameAction.equipWeapon(id : Long, weaponUid : Long, position : Integer)
 
 POST	/api2/user/:id/weapons/purchase		controllers.GameAction.purchaseWeapon(id : Long)
 POST	/api2/user/:id/weapons/gamble		controllers.GameAction.gambleWeapon(id : Long)

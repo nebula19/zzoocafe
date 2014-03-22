@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.avaje.ebean.Expression;
-
 import models.ZzooResult;
 import models.ebeans.User;
 import models.ebeans.UserWeapon;
@@ -69,9 +67,14 @@ public class GameAction extends Controller {
 	}
 
 	// PUT		/api2/user/:id/weapons/:weaponUid/equip
-	public static Result equipWeapon(Long id, Long weaponUid) {
-		// TODO implement needed
-		return ok(JsonUtil.getJsonResult(0));
+	public static Result equipWeapon(Long id, Long weaponUid, Integer position) {
+		User user = User.equipWeapon(id, weaponUid, position);
+		
+		Map<String, List<UserWeapon>> weaponList = new HashMap<String, List<UserWeapon>>();
+//		weaponList.put("user_weapons", User.find.byId(id).userWeapons);
+		weaponList.put("user_weapons", user.userWeapons);
+
+		return ok(JsonUtil.getJsonResult(0, weaponList));
 	}
 	
 	
@@ -85,10 +88,11 @@ public class GameAction extends Controller {
 		long r = (long)(Math.random() * 3) + 1;
 		System.out.println("new weapon id : " + r);
 		
-		User.purchaseWeaon(id, r);
+		User user = User.purchaseWeaon(id, r);
 		
 		Map<String, List<UserWeapon>> weaponList = new HashMap<String, List<UserWeapon>>();
-		weaponList.put("user_weapons", User.find.byId(id).userWeapons);
+//		weaponList.put("user_weapons", User.find.byId(id).userWeapons);
+		weaponList.put("user_weapons", user.userWeapons);
 
 		return ok(JsonUtil.getJsonResult(0, weaponList));
 	}
@@ -99,6 +103,7 @@ public class GameAction extends Controller {
 	public static Result getWeaponList() {
 		return ok(JsonUtil.getJsonResult(0, Weapon.list()));
 	}
+
 	
     
 }

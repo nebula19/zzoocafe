@@ -88,18 +88,39 @@ public class User extends Model  {
 	}
 	
 	
-    public static void purchaseWeaon(Long userId, Long weaponId) {
+    public static User purchaseWeaon(Long userId, Long weaponId) {
         User user = User.find.setId(userId).fetch("userWeapons", "weaponId").findUnique();
         
-        Weapon weapon = Weapon.find.ref(weaponId);
         UserWeapon userWeapon = new UserWeapon(user, weaponId);
         userWeapon.save();
         
         user.userWeapons.add( userWeapon );
         
         user.saveManyToManyAssociations("userWeapons");
+        
+        return user;
     }
 	
+    
+    public static User equipWeapon(Long id, Long weaponUid, Integer position) {
+		User user = User.find.byId(id);
+		
+		for (UserWeapon uw  : user.userWeapons ) {
+			
+			// TODO 최적화 필요. 무조건 full scan하는 중임. 
+			if (uw.position == position) {
+				uw.position = 0;
+				uw.update();
+			}
+			
+			if (uw.id == weaponUid) {
+				uw.position = position;
+				uw.update();
+			}
+		}
+		
+		return user;
+    }
     
     
     
