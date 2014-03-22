@@ -5,18 +5,26 @@
 # Home page
 GET     /                           controllers.Application.index()
 
-
 # user account info
-GET     /api2/user/:id/get                     controllers.UserAction.get(id : Long)
-GET     /api2/user/list                        controllers.UserAction.list()
-GET     /api2/user/create                      controllers.UserAction.create()
-POST    /api2/user/create                      controllers.UserAction.create()
-GET     /api2/user/:id/delete                  controllers.UserAction.delete(id : Long)
+#GET     /api2/user/create                      controllers.UserAction.create()
+#GET     /api2/user/update                      controllers.UserAction.update()
+#GET     /api2/user/:id/delete                  controllers.UserAction.delete(id : Long)
+
+
+
+GET        /api2/user                         controllers.UserAction.list()
+GET        /api2/user/:id                     controllers.UserAction.get(id : Long)
+POST       /api2/user                         controllers.UserAction.create()
+PUT        /api2/user                         controllers.UserAction.update()
+DELETE     /api2/user/:id                     controllers.UserAction.delete(id : Long)
+
+GET        /api2/user/:id/account_data        controllers.UserAction.get(id : Long)
 
 
 #user game play 
-GET		/api2/user/:id/play_data                controllers.GameAction.getPlayData(id : Long)
+GET		/api2/user/:id/game_data                controllers.GameAction.getGameData(id : Long)
 PUT		/api2/user/:id/play_data                controllers.GameAction.updatePlayData(id : Long)
+
 
 PUT		/api2/user/:id/weapons/:weaponUid/upgrade			controllers.GameAction.upgradeWeapon(id : Long, weaponUid : Long)
 PUT		/api2/user/:id/weapons/:weaponUid/equip/:position	controllers.GameAction.equipWeapon(id : Long, weaponUid : Long, position : Integer)

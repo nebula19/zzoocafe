@@ -18,13 +18,30 @@ import util.JsonUtil;
 public class GameAction extends Controller {
 
 	
-	public static Result getPlayData(Long id) {
-		return ok(JsonUtil.getJsonResult(0, User.getPlayData(id)));
+	public static Result getGameData(Long id) {
+		return ok(JsonUtil.getJsonResult(0, User.getGameData(id)));
 	}
 	
-	
 	/**
-	 * 게임 결과 정보 저장.
+	 * 단말에서 올린 정보로 게임 정보를 덮어쓴다.
+	 * @param id
+	 * @return
+	 */
+	public static Result replacePlayData(Long id) {
+		Form<User> userForm = form(User.class).bindFromRequest("score", "gold", "oil", "diamond");
+		
+    	if (userForm.hasErrors()) {
+    		badRequest(JsonUtil.getJsonResult(ZzooResult.BAD_REQUEST));
+    	}
+    	userForm.data().put("user_id", String.valueOf(id));
+
+    	User user = userForm.get();
+    	user.update(id);
+		return ok(JsonUtil.getJsonResult(0, user));
+	}
+
+	/**
+	 * 게임 결과를 현재 정보에 더하여 업데이트.
 	 * 
 	 * @param id
 	 * @return
@@ -37,11 +54,19 @@ public class GameAction extends Controller {
     	}
     	userForm.data().put("user_id", String.valueOf(id));
 
+    	User user = User.find.byId(id);
+    	user.score   += userForm.get().score;
+    	user.gold    += userForm.get().gold;
+    	user.oil     += userForm.get().oil;
+    	user.diamond += userForm.get().diamond;
     	
-		userForm.get().update(id);
-		return ok(JsonUtil.getJsonResult(0));
+    	user.update();
+    	
+		return ok(JsonUtil.getJsonResult(0, user));
 	}
 
+	
+	
 
 	// PUT		/api2/user/:id/weapons/:weaponUid/upgrade
 	public static Result upgradeWeapon(Long userId, Long weaponUid) {

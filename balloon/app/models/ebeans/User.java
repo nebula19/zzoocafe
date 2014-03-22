@@ -69,7 +69,7 @@ public class User extends Model  {
 	
 	
 
-	public static User getPlayData(Long id) {
+	public static User getGameData(Long id) {
 		return find.select("score, gold, oil, diamond").where("id = " + id).findUnique();
 	}
 
@@ -78,7 +78,7 @@ public class User extends Model  {
 	
 	public static List<User> list() {
 //		return find.where().findPagingList(10).getPage(0).getList();
-		return find.select("username, create_time").findList();
+		return find.select("username, createDate").orderBy("score desc").findList();
 	}
 
 	
