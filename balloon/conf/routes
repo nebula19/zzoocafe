@@ -23,7 +23,9 @@ GET        /api2/user/:id/account_data        controllers.UserAction.get(id : Lo
 
 #user game play 
 GET		/api2/user/:id/game_data                controllers.GameAction.getGameData(id : Long)
-PUT		/api2/user/:id/play_data                controllers.GameAction.updatePlayData(id : Long)
+PUT		/api2/user/:id/play_data                controllers.GameAction.replacePlayData(id : Long)
+PUT		/api2/user/:id/play_result              controllers.GameAction.updatePlayResult(id : Long)
+
 
 
 PUT		/api2/user/:id/weapons/:weaponUid/upgrade			controllers.GameAction.upgradeWeapon(id : Long, weaponUid : Long)

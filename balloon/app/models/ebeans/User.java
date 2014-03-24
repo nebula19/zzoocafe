@@ -26,7 +26,7 @@ public class User extends Model  {
 
 	// UniqueID
 	@Id
-	@Column(insertable = false)
+	@Column(insertable = false, updatable = false)
 	public Long id;
 	
 	

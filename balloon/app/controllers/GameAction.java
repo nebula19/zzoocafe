@@ -2,6 +2,8 @@ package controllers;
 
 import static play.data.Form.form;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,9 +12,13 @@ import models.ZzooResult;
 import models.ebeans.User;
 import models.ebeans.UserWeapon;
 import models.ebeans.Weapon;
+
+import org.springframework.util.StringUtils;
+
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
+import util.ConvUtil;
 import util.JsonUtil;
 
 public class GameAction extends Controller {
@@ -35,9 +41,38 @@ public class GameAction extends Controller {
     	}
     	userForm.data().put("user_id", String.valueOf(id));
 
-    	User user = userForm.get();
-    	user.update(id);
-		return ok(JsonUtil.getJsonResult(0, user));
+    	User user = User.find.byId(id);
+    	try {
+    		String param = null;
+    		
+    		param = userForm.data().get("score");
+    		if (!StringUtils.isEmpty(param)) {
+    			user.score = ConvUtil.asInt(param);	
+    		}
+
+    		param = userForm.data().get("gold");
+    		if (!StringUtils.isEmpty(param)) {
+    			user.gold = ConvUtil.asInt(param);	
+    		}
+
+    		param = userForm.data().get("oil");
+    		if (!StringUtils.isEmpty(param)) {
+    			user.oil = ConvUtil.asInt(param);	
+    		}
+
+    		param = userForm.data().get("diamond");
+    		if (!StringUtils.isEmpty(param)) {
+    			user.diamond = ConvUtil.asInt(param);	
+    		}
+
+        	user.update(id);
+    		return ok(JsonUtil.getJsonResult(0, user));
+    	}
+    	catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    	
+    	return badRequest(JsonUtil.getJsonResult(0, user));
 	}
 
 	/**
@@ -46,21 +81,22 @@ public class GameAction extends Controller {
 	 * @param id
 	 * @return
 	 */
-	public static Result updatePlayData(Long id) {
+	public static Result updatePlayResult(Long id) {
 		Form<User> userForm = form(User.class).bindFromRequest("score", "gold", "oil", "diamond");
 		
     	if (userForm.hasErrors()) {
     		badRequest(JsonUtil.getJsonResult(ZzooResult.BAD_REQUEST));
     	}
-    	userForm.data().put("user_id", String.valueOf(id));
 
-    	User user = User.find.byId(id);
-    	user.score   += userForm.get().score;
-    	user.gold    += userForm.get().gold;
-    	user.oil     += userForm.get().oil;
-    	user.diamond += userForm.get().diamond;
-    	
-    	user.update();
+    	User dbUser = User.find.byId(id);
+    	User user = userForm.get();
+
+    	user.score   += dbUser.score;
+    	user.gold    += dbUser.gold;
+    	user.oil     += dbUser.oil;
+    	user.diamond += dbUser.diamond;
+
+    	user.update(id);
     	
 		return ok(JsonUtil.getJsonResult(0, user));
 	}
