@@ -7,6 +7,8 @@ import java.util.List;
 
 import models.ZzooResult;
 import models.ebeans.User;
+import models.ebeans.UserWeapon;
+import models.ebeans.Weapon;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -37,7 +39,15 @@ public class UserAction extends Controller {
     	}
     	
     	System.out.println("success." + "User " + userForm.get().username + " has been created");
-    	userForm.get().save();
+    	
+    	// 사용자를 DB에 저장.
+    	User user = userForm.get();
+    	user.save();
+
+    	// 기본무기 2개 추가해주기.
+    	User.purchaseWeaon(user, 1L);
+    	User.purchaseWeaon(user, 2L);
+    	
     	flash("success", "User " + userForm.get().username + " has been created");
     	return ok(JsonUtil.getJsonResult(ZzooResult.OK));
     }

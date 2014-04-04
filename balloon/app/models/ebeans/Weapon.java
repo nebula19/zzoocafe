@@ -26,7 +26,7 @@ public class Weapon extends Model  {
 	
 	public String name;
 	public String type;
-	public String rarity;		// 희귀등급. rarity
+	public Integer grade;		// 희귀등급. rarity
 	public String image;
 	public String sound;
 	public Integer price;
@@ -37,9 +37,12 @@ public class Weapon extends Model  {
 	public Float velocity;
 
 	
-	@Column(columnDefinition = "timestamp default CURRENT_TIMESTAMP", insertable = false)
+	@Column(columnDefinition = "timestamp not null default '0000-00-00 00:00:00'", insertable = false, updatable = false)
 	public Date createDate;
 	
+	@Column(columnDefinition = "timestamp not null DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP", insertable = false, updatable = false)
+	public Date modifyDate;
+
 
 	public static Weapon get(Long id) {
 		return find.byId(id);

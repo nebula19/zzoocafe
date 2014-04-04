@@ -1,6 +1,9 @@
 package models.ebeans;
 
+import java.util.Date;
+
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -41,6 +44,14 @@ public class UserWeapon extends Model {
 	
 	public Integer position = 0;		// 장착위치. 0:미장착, 1:왼쪽, 2:오른쪽.
 
+	@Column(columnDefinition = "timestamp not null default '0000-00-00 00:00:00'")
+	public Date createDate;
+	
+	@Column(columnDefinition = "timestamp not null DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+	public Date modifyDate;
+
+	
+	
 	private static final long serialVersionUID = -3281989327266459016L;
 	public static Finder<Long, UserWeapon> find = new Finder<Long, UserWeapon>(Long.class, UserWeapon.class);
 

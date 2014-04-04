@@ -28,11 +28,16 @@ PUT		/api2/user/:id/play_result              controllers.GameAction.updatePlayRe
 
 
 
+GET		/api2/user/:id/weapons                  controllers.GameAction.getUserWeaponList(id : Long)
+
 PUT		/api2/user/:id/weapons/:weaponUid/upgrade			controllers.GameAction.upgradeWeapon(id : Long, weaponUid : Long)
 PUT		/api2/user/:id/weapons/:weaponUid/equip/:position	controllers.GameAction.equipWeapon(id : Long, weaponUid : Long, position : Integer)
 
-POST	/api2/user/:id/weapons/purchase		controllers.GameAction.purchaseWeapon(id : Long)
+POST	/api2/user/:id/weapons/:weaponUid/purchase		controllers.GameAction.purchaseWeapon(id : Long, weaponUid : Long)
 POST	/api2/user/:id/weapons/gamble		controllers.GameAction.gambleWeapon(id : Long)
+
+PUT	/api2/user/:id/weapons/:userWeaponId/sell		controllers.GameAction.selllWeapon(id : Long, userWeaponId : Long)
+
 
 
 GET		/api2/user/:id/friends				controllers.SocialAction.friendList(id : Long)

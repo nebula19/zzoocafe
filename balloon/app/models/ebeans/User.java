@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
 @Entity
@@ -51,11 +52,11 @@ public class User extends Model  {
 	@Column(columnDefinition = "int(11) default 0", insertable = false)
 	public Integer score;
 	
-	@Column(columnDefinition = "timestamp default CURRENT_TIMESTAMP", insertable = false, updatable = false)
+	@Column(columnDefinition = "timestamp not null default '0000-00-00 00:00:00'", insertable =  false)
 	public Date createDate;
 	
-//	@Column(columnDefinition = "timestamp DEFAULT now() ON UPDATE now()", insertable = false, updatable = false)
-//	public Date modifyDate;
+	@Column(columnDefinition = "timestamp not null DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP", insertable = false)
+	public Date modifyDate;
 	
 	
 	@OneToMany(mappedBy="user", cascade = CascadeType.ALL)
@@ -88,13 +89,12 @@ public class User extends Model  {
 	}
 	
 	
-    public static User purchaseWeaon(Long userId, Long weaponId) {
-        User user = User.find.setId(userId).fetch("userWeapons", "weaponId").findUnique();
+    public static User purchaseWeaon(User user, Long weaponId) {
         
         UserWeapon userWeapon = new UserWeapon(user, weaponId);
         userWeapon.save();
         
-        user.userWeapons.add( userWeapon );
+        user.userWeapons.add( UserWeapon.find.byId(userWeapon.id) );
         
         user.saveManyToManyAssociations("userWeapons");
         
@@ -102,7 +102,7 @@ public class User extends Model  {
     }
 	
     
-    public static User equipWeapon(Long id, Long weaponUid, Integer position) {
+    public static User equipWeapon(Long id, Long userWeaponUid, Integer position) {
 		User user = User.find.byId(id);
 		
 		for (UserWeapon uw  : user.userWeapons ) {
@@ -113,7 +113,7 @@ public class User extends Model  {
 				uw.update();
 			}
 			
-			if (uw.id == weaponUid) {
+			if (uw.id == userWeaponUid) {
 				uw.position = position;
 				uw.update();
 			}

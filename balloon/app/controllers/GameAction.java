@@ -15,6 +15,8 @@ import models.ebeans.Weapon;
 
 import org.springframework.util.StringUtils;
 
+import com.avaje.ebean.Ebean;
+
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -103,6 +105,14 @@ public class GameAction extends Controller {
 
 	
 	
+	
+	
+	public static Result getUserWeaponList(Long id) {
+		List<UserWeapon> userWeaponList = User.find.byId(id).userWeapons;
+		return ok(JsonUtil.getJsonResult(0, userWeaponList));
+	}
+
+	
 
 	// PUT		/api2/user/:id/weapons/:weaponUid/upgrade
 	public static Result upgradeWeapon(Long userId, Long weaponUid) {
@@ -128,8 +138,8 @@ public class GameAction extends Controller {
 	}
 
 	// PUT		/api2/user/:id/weapons/:weaponUid/equip
-	public static Result equipWeapon(Long id, Long weaponUid, Integer position) {
-		User user = User.equipWeapon(id, weaponUid, position);
+	public static Result equipWeapon(Long id, Long userWeaponUid, Integer position) {
+		User user = User.equipWeapon(id, userWeaponUid, position);
 		
 		Map<String, List<UserWeapon>> weaponList = new HashMap<String, List<UserWeapon>>();
 //		weaponList.put("user_weapons", User.find.byId(id).userWeapons);
@@ -139,28 +149,72 @@ public class GameAction extends Controller {
 	}
 	
 	
-	public static Result purchaseWeapon(Long id) {
-		//  currently same with gamble weapon.
-		return gambleWeapon(id);
+	public static Result purchaseWeapon(Long userId, Long weaponId) {
+        User user = User.find.setId(userId).fetch("userWeapons", "weaponId").findUnique();
+
+        if (user == null) {
+        	return ok(JsonUtil.getJsonResult(400, "사용자가 존재하지 않습니다.",null));
+        }
+        
+        if (user.gold <= 10000) {
+        	return ok(JsonUtil.getJsonResult(0, "골드가 부족합니다.", null));
+        }
+        else {
+        	user.gold -= 10000;
+        	user.update();
+        }
+        
+		User.purchaseWeaon(user, weaponId);
+		
+		Map<String, List<UserWeapon>> weaponList = new HashMap<String, List<UserWeapon>>();
+		weaponList.put("user_weapons", user.userWeapons);
+
+		
+		return ok(JsonUtil.getJsonResult(0, weaponList));
 	}
 
 	
 	public static Result gambleWeapon(Long id) {
-		long r = (long)(Math.random() * 3) + 1;
+		
+		// choose Random weapon
+		long r = (long)(Math.random() * 20) + 1;
 		System.out.println("new weapon id : " + r);
 		
-		User user = User.purchaseWeaon(id, r);
-		
-		Map<String, List<UserWeapon>> weaponList = new HashMap<String, List<UserWeapon>>();
-//		weaponList.put("user_weapons", User.find.byId(id).userWeapons);
-		weaponList.put("user_weapons", user.userWeapons);
-
-		return ok(JsonUtil.getJsonResult(0, weaponList));
+		return purchaseWeapon(id, r);
 	}
 
 	
+	public static Result selllWeapon(Long userId, Long userWeaponId) {
+		User user = User.find.byId(userId);
+		if (user == null) {
+        	return ok(JsonUtil.getJsonResult(400, "사용자가 존재하지 않습니다.",null));
+        }
+		 
+		// UserWeapon.find.where("user_id = " + userId + " and weapon_id = " + weaponId).findUnique();
+		
+		UserWeapon userWeapon = UserWeapon.find.byId(userWeaponId);
+		if (userWeapon == null) {
+        	return ok(JsonUtil.getJsonResult(400, "소유하지 않은 무기입니다.",null));
+        }
+		
+		Weapon weapon = Weapon.find.byId(userWeapon.weaponId);
+		if (weapon == null) {
+        	return ok(JsonUtil.getJsonResult(400, "존재하지 않는 무기입니다.",null));
+        }
+		
+		user.gold = user.gold + (int)(weapon.price*0.5);
+		user.update();
+		
+		userWeapon.delete();
+		 
+		return ok(JsonUtil.getJsonResult(0,"", user)); 
+	}
 	
 	
+	/**
+	 * 무기 전체 목록.
+	 * @return
+	 */
 	public static Result getWeaponList() {
 		return ok(JsonUtil.getJsonResult(0, Weapon.list()));
 	}
