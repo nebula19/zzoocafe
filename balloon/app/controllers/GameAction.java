@@ -86,6 +86,8 @@ public class GameAction extends Controller {
 	public static Result updatePlayResult(Long id) {
 		Form<User> userForm = form(User.class).bindFromRequest("score", "gold", "oil", "diamond");
 		
+		System.out.println("UpdatePlayResult." + "User id:" + id);
+
     	if (userForm.hasErrors()) {
     		badRequest(JsonUtil.getJsonResult(ZzooResult.BAD_REQUEST));
     	}
@@ -93,23 +95,35 @@ public class GameAction extends Controller {
     	User dbUser = User.find.byId(id);
     	User user = userForm.get();
 
-    	user.score   += dbUser.score;
-    	user.gold    += dbUser.gold;
-    	user.oil     += dbUser.oil;
-    	user.diamond += dbUser.diamond;
-
-    	user.update(id);
+//    	user.score   += dbUser.score;
+//    	user.gold    += dbUser.gold;
+//    	user.oil     += dbUser.oil;
+//    	user.diamond += dbUser.diamond;
+//
+//    	user.update(id);
     	
-		return ok(JsonUtil.getJsonResult(0, user));
+
+    	dbUser.score   += user.score;
+    	dbUser.gold    += user.gold;
+    	dbUser.oil     += user.oil;
+    	dbUser.diamond += user.diamond;
+
+    	dbUser.update();
+		return ok(JsonUtil.getJsonResult(0, dbUser));
 	}
 
 	
 	
 	
 	
-	public static Result getUserWeaponList(Long id) {
-		List<UserWeapon> userWeaponList = User.find.byId(id).userWeapons;
-		return ok(JsonUtil.getJsonResult(0, userWeaponList));
+	public static Result userWeaponList(Long id) {
+//		List<UserWeapon> userWeaponList = User.find.byId(id).userWeapons;
+		return ok(JsonUtil.getJsonResult(0, getUserWeaopnList(id)));
+	}
+	
+	
+	private static List<UserWeapon> getUserWeaopnList(Long userId) {
+		return UserWeapon.find.where("user_id=" + userId).orderBy("position desc").findList();
 	}
 
 	
@@ -138,14 +152,14 @@ public class GameAction extends Controller {
 	}
 
 	// PUT		/api2/user/:id/weapons/:weaponUid/equip
-	public static Result equipWeapon(Long id, Long userWeaponUid, Integer position) {
-		User user = User.equipWeapon(id, userWeaponUid, position);
+	public static Result equipWeapon(Long userId, Long userWeaponUid, Integer position) {
+		User user = User.equipWeapon(userId, userWeaponUid, position);
 		
-		Map<String, List<UserWeapon>> weaponList = new HashMap<String, List<UserWeapon>>();
-//		weaponList.put("user_weapons", User.find.byId(id).userWeapons);
-		weaponList.put("user_weapons", user.userWeapons);
+//		Map<String, List<UserWeapon>> weaponList = new HashMap<String, List<UserWeapon>>();
+////		weaponList.put("user_weapons", User.find.byId(id).userWeapons);
+//		weaponList.put("user_weapons", user.userWeapons);
 
-		return ok(JsonUtil.getJsonResult(0, weaponList));
+		return ok(JsonUtil.getJsonResult(0, getUserWeaopnList(userId)));
 	}
 	
 	
@@ -166,11 +180,10 @@ public class GameAction extends Controller {
         
 		User.purchaseWeaon(user, weaponId);
 		
-		Map<String, List<UserWeapon>> weaponList = new HashMap<String, List<UserWeapon>>();
-		weaponList.put("user_weapons", user.userWeapons);
-
+//		Map<String, List<UserWeapon>> weaponList = new HashMap<String, List<UserWeapon>>();
+//		weaponList.put("user_weapons", user.userWeapons);
 		
-		return ok(JsonUtil.getJsonResult(0, weaponList));
+		return ok(JsonUtil.getJsonResult(0, getUserWeaopnList(userId)));
 	}
 
 	
@@ -201,6 +214,10 @@ public class GameAction extends Controller {
 		if (weapon == null) {
         	return ok(JsonUtil.getJsonResult(400, "존재하지 않는 무기입니다.",null));
         }
+		
+		if (userWeapon.position == 1 || userWeapon.position == 2) {
+			return ok(JsonUtil.getJsonResult(400, "장착중인 무기는 판매할 수 없습니다.",null));
+		}
 		
 		user.gold = user.gold + (int)(weapon.price*0.5);
 		user.update();

@@ -105,18 +105,25 @@ public class User extends Model  {
     public static User equipWeapon(Long id, Long userWeaponUid, Integer position) {
 		User user = User.find.byId(id);
 		
+		boolean update = false;
 		for (UserWeapon uw  : user.userWeapons ) {
 			
 			// TODO 최적화 필요. 무조건 full scan하는 중임. 
 			if (uw.position == position) {
 				uw.position = 0;
-				uw.update();
+				update = true;
 			}
 			
 			if (uw.id == userWeaponUid) {
 				uw.position = position;
+				update = true;
+			}
+			
+			if (update) {
 				uw.update();
 			}
+			
+			update = false;
 		}
 		
 		return user;
