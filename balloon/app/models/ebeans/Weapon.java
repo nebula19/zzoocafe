@@ -9,6 +9,10 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import play.db.ebean.Model;
+import play.db.ebean.Transactional;
+
+import com.avaje.ebean.Ebean;
+import com.avaje.ebean.SqlQuery;
 
 @Entity
 @Table(name="t_weapon") 
@@ -54,6 +58,21 @@ public class Weapon extends Model  {
 	}
 	
 	public static Finder<Long, Weapon> find = new Finder<Long, Weapon>(Long.class, Weapon.class);
+
+
+	public static void deleteAll() {
+		Ebean.createSqlUpdate("truncate table t_weapon").execute();
+		Ebean.getServerCacheManager().clearAll();
+	}
+
+	@Transactional
+	public static void replaceAll(List<Weapon> newWeaponList) {
+//		deleteAll();
+		for (Weapon weapon : newWeaponList) {
+			weapon.update();
+		}
+		Ebean.getServerCacheManager().clearAll();
+	}
 
 
 }

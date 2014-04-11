@@ -52,6 +52,8 @@ GET    /api2/weapons							controllers.GameAction.getWeaponList()
 #rankings
 
 
+#admin
+GET    /admin/updateWeaponDB							controllers.AdminAction.updateWeaponDBFromGoogleDoc()
 
 
 # Map static resources from the /public folder to the /assets URL path

@@ -235,7 +235,5 @@ public class GameAction extends Controller {
 	public static Result getWeaponList() {
 		return ok(JsonUtil.getJsonResult(0, Weapon.list()));
 	}
-
 	
-    
 }
