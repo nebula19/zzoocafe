@@ -34,8 +34,8 @@ public class User extends Model  {
 	// Profile
 	@Column(columnDefinition = "varchar(100) not null default ''", unique=true)
 	public String username;
-	@Column(columnDefinition = "bigint(20) default 0", unique=true, nullable=true)
-	public Long socialAccountId;
+	@Column(columnDefinition = "varhar(100) default 0", unique=true, nullable=true)
+	public String socialAccountId;
 	
 	@Column(columnDefinition = "varchar(250) default ''")
 	public String thumbnailUrl;
@@ -70,7 +70,7 @@ public class User extends Model  {
 	
 	
 
-	public static User getGameData(Long id) {
+	public static User getPlayData(Long id) {
 		return find.select("score, gold, oil, diamond").where("id = " + id).findUnique();
 	}
 

@@ -22,7 +22,7 @@ GET        /api2/user/:id/account_data        controllers.UserAction.get(id : Lo
 
 
 #user game play 
-GET		/api2/user/:id/game_data                controllers.GameAction.getGameData(id : Long)
+GET		/api2/user/:id/play_data                controllers.GameAction.getPlayData(id : Long)
 PUT		/api2/user/:id/play_data                controllers.GameAction.replacePlayData(id : Long)
 PUT		/api2/user/:id/play_result              controllers.GameAction.updatePlayResult(id : Long)
 

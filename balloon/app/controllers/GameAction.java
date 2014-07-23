@@ -26,8 +26,8 @@ import util.JsonUtil;
 public class GameAction extends Controller {
 
 	
-	public static Result getGameData(Long id) {
-		return ok(JsonUtil.getJsonResult(0, User.getGameData(id)));
+	public static Result getPlayData(Long id) {
+		return ok(JsonUtil.getJsonResult(0, User.getPlayData(id)));
 	}
 	
 	/**
@@ -68,13 +68,13 @@ public class GameAction extends Controller {
     		}
 
         	user.update(id);
-    		return ok(JsonUtil.getJsonResult(0, user));
+    		return ok(JsonUtil.getJsonResult(ZzooResult.OK));
     	}
     	catch (Exception e) {
     		e.printStackTrace();
     	}
     	
-    	return badRequest(JsonUtil.getJsonResult(0, user));
+    	return badRequest(JsonUtil.getJsonResult(ZzooResult.BAD_REQUEST));
 	}
 
 	/**
@@ -155,11 +155,10 @@ public class GameAction extends Controller {
 	public static Result equipWeapon(Long userId, Long userWeaponUid, Integer position) {
 		User user = User.equipWeapon(userId, userWeaponUid, position);
 		
-//		Map<String, List<UserWeapon>> weaponList = new HashMap<String, List<UserWeapon>>();
-////		weaponList.put("user_weapons", User.find.byId(id).userWeapons);
-//		weaponList.put("user_weapons", user.userWeapons);
-
-		return ok(JsonUtil.getJsonResult(0, getUserWeaopnList(userId)));
+		Map<String, List<UserWeapon>> resultMap = new HashMap<String, List<UserWeapon>>();
+		resultMap.put("user_weapons", getUserWeaopnList(userId));
+		
+		return ok(JsonUtil.getJsonResult(0, resultMap));
 	}
 	
 	
@@ -180,17 +179,17 @@ public class GameAction extends Controller {
         
 		User.purchaseWeaon(user, weaponId);
 		
-//		Map<String, List<UserWeapon>> weaponList = new HashMap<String, List<UserWeapon>>();
-//		weaponList.put("user_weapons", user.userWeapons);
 		
-		return ok(JsonUtil.getJsonResult(0, getUserWeaopnList(userId)));
+		User dbUser = User.find.byId(userId);
+		
+		return ok(JsonUtil.getJsonResult(0, dbUser));
 	}
 
 	
 	public static Result gambleWeapon(Long id) {
 		
 		// choose Random weapon
-		long r = (long)(Math.random() * 20) + 1;
+		long r = (long)(Math.random() * 21) + 1;
 		System.out.println("new weapon id : " + r);
 		
 		return purchaseWeapon(id, r);
@@ -224,7 +223,7 @@ public class GameAction extends Controller {
 		
 		userWeapon.delete();
 		 
-		return ok(JsonUtil.getJsonResult(0,"", user)); 
+		return ok(JsonUtil.getJsonResult(0, user)); 
 	}
 	
 	
