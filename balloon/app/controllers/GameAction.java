@@ -103,7 +103,10 @@ public class GameAction extends Controller {
 //    	user.update(id);
     	
 
-    	dbUser.score   += user.score;
+    	if (dbUser.score < user.score) {
+        	dbUser.score = user.score ;
+    	}
+    	
     	dbUser.gold    += user.gold;
     	dbUser.oil     += user.oil;
     	dbUser.diamond += user.diamond;
