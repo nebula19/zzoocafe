@@ -32,9 +32,9 @@ public class User extends Model  {
 	
 	
 	// Profile
-	@Column(columnDefinition = "varchar(100) not null default ''", unique=true)
+	@Column(columnDefinition = "varchar(100) default ''", unique=true, nullable=true)
 	public String username;
-	@Column(columnDefinition = "varhar(100) default 0", unique=true, nullable=true)
+	@Column(columnDefinition = "varhar(100) not null default 0", unique=true)
 	public String socialAccountId;
 	
 	@Column(columnDefinition = "varchar(250) default ''")
@@ -43,16 +43,16 @@ public class User extends Model  {
 	// Game info
 	@Column(columnDefinition = "int(5) default 0", insertable = false)
 	public Integer gold;
-	@Column(columnDefinition = "int(5) default 0", insertable = false)
-	public Integer oil;
-	@Column(columnDefinition = "int(5) default 0", insertable = false)
-	public Integer diamond;
+//	@Column(columnDefinition = "int(5) default 0", insertable = false)
+//	public Integer oil;
+//	@Column(columnDefinition = "int(5) default 0", insertable = false)
+//	public Integer diamond;
 
 	
 	@Column(columnDefinition = "int(11) default 0", insertable = false)
 	public Integer score;
 	
-	@Column(columnDefinition = "timestamp not null default '0000-00-00 00:00:00'", insertable =  false)
+	@Column(columnDefinition = "timestamp not null default '1980-01-01 00:00:00'", insertable =  false)
 	public Date createDate;
 	
 	@Column(columnDefinition = "timestamp not null DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP", insertable = false)
@@ -71,21 +71,20 @@ public class User extends Model  {
 	
 
 	public static User getPlayData(Long id) {
-		return find.select("score, gold, oil, diamond").where("id = " + id).findUnique();
+		return find.select("score, gold").where("id = " + id).findUnique();
 	}
 
 	
 	
 	
-	public static List<User> list() {
+	public static List<User> list(int pageNum) {
 //		return find.where().findPagingList(10).getPage(0).getList();
-		return find.select("username, createDate").orderBy("score desc").findList();
+		return find.select("id, createDate").findPagingList(10).getPage(pageNum).getList();
 	}
 
 	
-	public static List<User> listOrderByScore() {
-//		return find.where().findPagingList(10).getPage(0).getList();
-		return find.select("id, user_id, username, score").where().orderBy("score desc").findPagingList(10).getPage(0).getList();
+	public static List<User> listOrderByScore(int pageNum) {
+		return find.select("id, username, thumbnail_url, score").where().orderBy("score desc").findPagingList(10).getPage(pageNum).getList();
 	}
 	
 	
@@ -96,7 +95,7 @@ public class User extends Model  {
         
         user.userWeapons.add( UserWeapon.find.byId(userWeapon.id) );
         
-        user.saveManyToManyAssociations("userWeapons");
+//        user.saveManyToManyAssociations("userWeapons");
         
         return user;
     }
@@ -133,6 +132,16 @@ public class User extends Model  {
     
     
 	public static Finder<Long, User> find = new Finder<Long, User>(Long.class, User.class);
+
+	public static User getBySocialId(String socialId) {
+		return find.select("id, username").where().eq("social_account_id", socialId).findUnique();
+	}
+
+
+
+	public static User getAccountInfoBySocialId(String socialId) {
+		return find.select("id, username").where().eq("social_account_id", socialId).findUnique();
+	}
 
 
 }

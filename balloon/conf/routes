@@ -6,41 +6,41 @@
 GET     /                           controllers.Application.index()
 
 # user account info
-#GET     /api2/user/create                      controllers.UserAction.create()
-#GET     /api2/user/update                      controllers.UserAction.update()
-#GET     /api2/user/:id/delete                  controllers.UserAction.delete(id : Long)
-
-
-
-GET        /api2/user                         controllers.UserAction.list()
+POST       /api2/user                         controllers.UserAction.subscribe()
 GET        /api2/user/:id                     controllers.UserAction.get(id : Long)
-POST       /api2/user                         controllers.UserAction.create()
-PUT        /api2/user                         controllers.UserAction.update()
-DELETE     /api2/user/:id                     controllers.UserAction.delete(id : Long)
-
-GET        /api2/user/:id/account_data        controllers.UserAction.get(id : Long)
-
+# PUT : 사용자 정보 업데이트.
+# DELETE : 탈퇴 
 
 #user game play 
-GET		/api2/user/:id/play_data                controllers.GameAction.getPlayData(id : Long)
-PUT		/api2/user/:id/play_data                controllers.GameAction.replacePlayData(id : Long)
-PUT		/api2/user/:id/play_result              controllers.GameAction.updatePlayResult(id : Long)
+PUT		/api2/user/:id/play_result              	controllers.GameAction.updatePlayResult(id : Long)
+PUT		/api2/user/:id/weapons/:weaponUid/upgrade	controllers.GameAction.upgradeWeapon(id : Long, weaponUid : Long)
+
+
+#rankings
+GET	   /api2/ranking/:pageNum					controllers.GameAction.getRanking(pageNum : Integer)
 
 
 
-GET		/api2/user/:id/weapons                  controllers.GameAction.userWeaponList(id : Long)
 
-PUT		/api2/user/:id/weapons/:weaponUid/upgrade			controllers.GameAction.upgradeWeapon(id : Long, weaponUid : Long)
-PUT		/api2/user/:id/weapons/:weaponUid/equip/:position	controllers.GameAction.equipWeapon(id : Long, weaponUid : Long, position : Integer)
-
-POST	/api2/user/:id/weapons/:weaponUid/purchase		controllers.GameAction.purchaseWeapon(id : Long, weaponUid : Long)
-POST	/api2/user/:id/weapons/gamble		controllers.GameAction.gambleWeapon(id : Long)
-
-PUT	/api2/user/:id/weapons/:userWeaponId/sell		controllers.GameAction.selllWeapon(id : Long, userWeaponId : Long)
-
+## 2014.08.06 이후 안쓰는 API
+#
+#GET        /api2/user                         controllers.UserAction.list()
+#PUT        /api2/user                         controllers.UserAction.update()
+#DELETE     /api2/user/:id                     controllers.UserAction.delete(id : Long)
+#GET        /api2/user/social_id/:socialId     controllers.UserAction.getBySocialId(socialId : String)
+#GET        /api2/user/:id/account_data        controllers.UserAction.get(id : Long)
 
 
-GET		/api2/user/:id/friends				controllers.SocialAction.friendList(id : Long)
+#GET		/api2/user/:id/play_data                		controllers.GameAction.getPlayData(id : Long)
+#PUT		/api2/user/:id/play_data                		controllers.GameAction.replacePlayData(id : Long)
+#POST	/api2/user/:id/weapons/:weaponUid/purchase		controllers.GameAction.purchaseWeapon(id : Long, weaponUid : Long)
+#POST	/api2/user/:id/weapons/gamble					controllers.GameAction.gambleWeapon(id : Long)
+#PUT		/api2/user/:id/weapons/:weaponUid/equip/:position	controllers.GameAction.equipWeapon(id : Long, weaponUid : Long, position : Integer)
+
+#GET		/api2/user/:id/weapons                  		controllers.GameAction.userWeaponList(id : Long)
+#PUT     /api2/user/:id/weapons/:userWeaponId/sell		controllers.GameAction.selllWeapon(id : Long, userWeaponId : Long)
+
+#GET		/api2/user/:id/friends				controllers.SocialAction.friendList(id : Long)
 
 
 
@@ -48,8 +48,6 @@ GET		/api2/user/:id/friends				controllers.SocialAction.friendList(id : Long)
 #weapon definitions  
 GET    /api2/weapons							controllers.GameAction.getWeaponList()
 
-
-#rankings
 
 
 #admin

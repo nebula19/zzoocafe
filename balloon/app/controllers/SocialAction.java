@@ -8,7 +8,7 @@ import util.JsonUtil;
 public class SocialAction extends Controller {
 
 	public static Result friendList(Long id) {
-		return ok(JsonUtil.getJsonResult(0, User.listOrderByScore()));
+		return ok(JsonUtil.getJsonResult(0, User.listOrderByScore(0)));
 	}
     
 }
